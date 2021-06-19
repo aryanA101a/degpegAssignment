@@ -58,8 +58,9 @@ class _GridPageState extends State<GridPage> {
                         )
                       : GridView.builder(
                           gridDelegate:
-                              SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 200,
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  // maxCrossAxisExtent: 200,
+                                  crossAxisCount: 2,
                                   childAspectRatio: 3 / 2.5,
                                   crossAxisSpacing: 3,
                                   mainAxisSpacing: 3),
@@ -101,9 +102,13 @@ class _GridPageState extends State<GridPage> {
                                       children: [
                                         Stack(
                                           children: [
-                                            SizedBox(
-                                              height: 100,
-                                              width: double.infinity,
+                                            AspectRatio(
+                                              aspectRatio: 3 / 1.9,
+                                              // height: MediaQuery.of(context)
+                                              //         .size
+                                              //         .height *
+                                              //     0.15,
+                                              // width: double.infinity,
                                               child: Card(
                                                 elevation: 0,
                                                 shape: RoundedRectangleBorder(

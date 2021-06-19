@@ -4,17 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/services.dart';
 
-class HlsAudioPage extends StatefulWidget {
+class VideoPlayerPage extends StatefulWidget {
   final int views;
   final int watchtime;
   final String videoUrl;
   final String videoId;
-  HlsAudioPage(this.videoUrl, this.videoId, this.views, this.watchtime);
+  final String title;
+  final String description;
+  VideoPlayerPage(
+      {required this.videoUrl,
+      required this.videoId,
+      required this.views,
+      required this.watchtime,
+      required this.description,
+      required this.title});
   @override
-  _HlsAudioPageState createState() => _HlsAudioPageState();
+  _VideoPlayerPageState createState() => _VideoPlayerPageState();
 }
 
-class _HlsAudioPageState extends State<HlsAudioPage> {
+class _VideoPlayerPageState extends State<VideoPlayerPage> {
   late BetterPlayerController _betterPlayerController;
   BetterPlayerTheme _playerTheme = BetterPlayerTheme.material;
   FirebaseFunctions firebaseFunctions = FirebaseFunctions();
@@ -33,7 +41,7 @@ class _HlsAudioPageState extends State<HlsAudioPage> {
                 widget.watchtime,
                 controller: controller,
               )),
-      fullScreenByDefault: true,
+      // fullScreenByDefault: true,
       autoPlay: true,
       aspectRatio: 16 / 9,
       fit: BoxFit.contain,
@@ -59,33 +67,82 @@ class _HlsAudioPageState extends State<HlsAudioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("HLS Player"),
-      ),
-      body: OrientationBuilder(builder: (context, orientation) {
-        return Stack(
+      body: SafeArea(
+        child: ListView(
           children: [
             AspectRatio(
               aspectRatio: 16 / 9,
               child: BetterPlayer(controller: _betterPlayerController),
             ),
-            //   SizedBox(
-            //   height: 50,
-            //   width: 70,
-            //   child: Container(
-            //     color: Colors.red,
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(0),
-            //       child: Text(
-            //         'Live',
-            //         style: TextStyle(color: Colors.white),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 15),
+                      child: Text(
+                        widget.title,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.share_rounded),
+                ),
+              ],
+            ),
+            Divider(
+              height: 0,
+            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: Text(
+                    'Description',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                  ),
+                )),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  child: Text(
+                    widget.description,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                )),
+            Divider(
+              height: 0,
+            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: Text(
+                    'Comments',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                  ),
+                )),
+            Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: Text(
+                    'Empty...',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
+                  ),
+                )),
           ],
-        );
-      }),
+        ),
+      ),
     );
   }
 }

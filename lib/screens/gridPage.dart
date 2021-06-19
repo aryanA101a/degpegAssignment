@@ -23,8 +23,14 @@ class _GridPageState extends State<GridPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.amber.shade50,
       appBar: AppBar(
-        title: Text('DegPeg'),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.amber,
+        title: Text(
+          'Popular',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: Container(
           child: FutureBuilder(
@@ -54,9 +60,9 @@ class _GridPageState extends State<GridPage> {
                           gridDelegate:
                               SliverGridDelegateWithMaxCrossAxisExtent(
                                   maxCrossAxisExtent: 200,
-                                  childAspectRatio: 3 / 2,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
+                                  childAspectRatio: 3 / 2.5,
+                                  crossAxisSpacing: 3,
+                                  mainAxisSpacing: 3),
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (BuildContext ctx, index) {
                             print(
@@ -67,29 +73,95 @@ class _GridPageState extends State<GridPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => HlsAudioPage(
-                                        snapshot.data!.docs[index]
+                                      builder: (context) => VideoPlayerPage(
+                                        title: snapshot.data!.docs[index]
+                                            .get('title'),
+                                        description: snapshot.data!.docs[index]
+                                            .get('description'),
+                                        videoUrl: snapshot.data!.docs[index]
                                             .get('videoUrl'),
-                                        snapshot.data!.docs[index]
+                                        videoId: snapshot.data!.docs[index]
                                             .get('videoId'),
-                                        snapshot.data!.docs[index].get('views'),
-                                        snapshot.data!.docs[index]
+                                        views: snapshot.data!.docs[index]
+                                            .get('views'),
+                                        watchtime: snapshot.data!.docs[index]
                                             .get('watchtime'),
                                       ),
                                     ));
                               },
-                              child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(12)),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      snapshot.data!.docs[index]
-                                          .get('thumbnail'),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )),
+                              child: SizedBox(
+                                // height: 80,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            new BorderRadius.circular(12)),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            SizedBox(
+                                              height: 100,
+                                              width: double.infinity,
+                                              child: Card(
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        new BorderRadius
+                                                            .circular(12)),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: Image.network(
+                                                    snapshot.data!.docs[index]
+                                                        .get('thumbnail'),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black
+                                                      .withOpacity(0.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: Text(
+                                                    '${snapshot.data!.docs[index].get('views')} views',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                        fontSize: 12),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(
+                                              snapshot.data!.docs[index]
+                                                  .get('title'),
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ),
                             );
                           });
                 },
